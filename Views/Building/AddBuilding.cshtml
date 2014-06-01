@@ -1,0 +1,42 @@
+﻿@model RS2.Models.AddBuildingModel
+
+@{
+    ViewBag.Title = "AddBuilding";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section UserMenu
+{
+    @if (Request.Cookies.AllKeys.Contains("username"))
+    {
+        RS2.Models.user U = Model.UserDetailsModel.User;
+ 
+        <p>User: @Html.DisplayFor(model => model.UserDetailsModel.User.nickname) (@Html.DisplayFor(model=>model.UserDetailsModel.User.username))</p>
+        <hr />
+        
+        foreach(RS2.Models.city C in Model.UserDetailsModel.Cities)
+        {
+            <button type="button" class="btn btn-lg btn-default" style="width:100%">
+                @Html.ActionLink(C.name, "ShowCity", "Home", new { id = C.id }, null)
+            </button>
+        }
+    }
+}
+
+@section MainSection
+{
+    
+    @foreach (RS2.Models.building B in Model.AvailableBuildings)
+    {
+       <button type="button" class="btn btn-lg btn-default">
+            @Html.ActionLink(B.name, "AddBuilding1","Building",new {id = Model.cityID,
+                                                                    row = Model.row,
+                                                                    column = Model.column,
+                                                                    buildingID = B.id,
+                                                                    buildDate = RS2.Constants.convertDateTimeIntoSecs(DateTime.UtcNow), 
+                                                                    buildTime = 120}, null)
+       </button>  
+    }
+    @Html.DisplayFor(model => model.cityID)
+}

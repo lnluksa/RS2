@@ -1,0 +1,764 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="RS2Model.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="RS2ModelStoreContainer">
+          <EntitySet Name="alliance" EntityType="RS2Model.Store.alliance" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="attack" EntityType="RS2Model.Store.attack" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="buildings" EntityType="RS2Model.Store.buildings" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="cities" EntityType="RS2Model.Store.cities" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="city_buildings" EntityType="RS2Model.Store.city_buildings" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="city_types" EntityType="RS2Model.Store.city_types" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="sysdiagrams" EntityType="RS2Model.Store.sysdiagrams" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="user_cities" EntityType="RS2Model.Store.user_cities" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="users" EntityType="RS2Model.Store.users" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_alliance_users" Association="RS2Model.Store.FK_alliance_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="alliance" EntitySet="alliance" />
+          </AssociationSet>
+          <AssociationSet Name="FK_alliance_users1" Association="RS2Model.Store.FK_alliance_users1">
+            <End Role="users" EntitySet="users" />
+            <End Role="alliance" EntitySet="alliance" />
+          </AssociationSet>
+          <AssociationSet Name="FK_attack_cities" Association="RS2Model.Store.FK_attack_cities">
+            <End Role="cities" EntitySet="cities" />
+            <End Role="attack" EntitySet="attack" />
+          </AssociationSet>
+          <AssociationSet Name="FK_attack_cities1" Association="RS2Model.Store.FK_attack_cities1">
+            <End Role="cities" EntitySet="cities" />
+            <End Role="attack" EntitySet="attack" />
+          </AssociationSet>
+          <AssociationSet Name="FK_cities_city_types" Association="RS2Model.Store.FK_cities_city_types">
+            <End Role="city_types" EntitySet="city_types" />
+            <End Role="cities" EntitySet="cities" />
+          </AssociationSet>
+          <AssociationSet Name="FK_city_buildings_buildings" Association="RS2Model.Store.FK_city_buildings_buildings">
+            <End Role="buildings" EntitySet="buildings" />
+            <End Role="city_buildings" EntitySet="city_buildings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_city_buildings_cities" Association="RS2Model.Store.FK_city_buildings_cities">
+            <End Role="cities" EntitySet="cities" />
+            <End Role="city_buildings" EntitySet="city_buildings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_cities_cities" Association="RS2Model.Store.FK_user_cities_cities">
+            <End Role="cities" EntitySet="cities" />
+            <End Role="user_cities" EntitySet="user_cities" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_cities_users" Association="RS2Model.Store.FK_user_cities_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="user_cities" EntitySet="user_cities" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="alliance">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="user1_id" Type="int" Nullable="false" />
+          <Property Name="user2_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="attack">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="attacker_city_id" Type="int" Nullable="false" />
+          <Property Name="defender_city_id" Type="int" Nullable="false" />
+          <Property Name="attack_time" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="buildings">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="base_food_production" Type="float" Nullable="false" />
+          <Property Name="base_money_production" Type="float" Nullable="false" />
+          <Property Name="base_materials_production" Type="float" Nullable="false" />
+          <Property Name="base_army_producton" Type="float" Nullable="false" />
+          <Property Name="base_food_cost" Type="float" Nullable="false" />
+          <Property Name="base_money_cost" Type="float" Nullable="false" />
+          <Property Name="base_materials_cost" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="cities">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="food" Type="float" Nullable="false" />
+          <Property Name="money" Type="float" Nullable="false" />
+          <Property Name="materials" Type="float" Nullable="false" />
+          <Property Name="army" Type="float" Nullable="false" />
+          <Property Name="city_type" Type="int" Nullable="false" />
+          <Property Name="position_row" Type="int" Nullable="false" />
+          <Property Name="position_column" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="city_buildings">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="city_id" Type="int" Nullable="false" />
+          <Property Name="building_id" Type="int" Nullable="false" />
+          <Property Name="lvl" Type="int" Nullable="false" />
+          <Property Name="building_positionX" Type="int" Nullable="false" />
+          <Property Name="building_positionY" Type="int" Nullable="false" />
+          <Property Name="isPending" Type="int" />
+          <Property Name="buildStarted" Type="datetime" Nullable="false" />
+          <Property Name="buildTime" Type="int" />
+        </EntityType>
+        <EntityType Name="city_types">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="food_multi" Type="float" Nullable="false" />
+          <Property Name="money_multi" Type="float" Nullable="false" />
+          <Property Name="materials_multi" Type="float" Nullable="false" />
+          <Property Name="army_multi" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="128" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="user_cities">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="city_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="username" Type="varchar" Nullable="false" MaxLength="25" />
+          <Property Name="password" Type="varchar" Nullable="false" MaxLength="25" />
+          <Property Name="nickname" Type="varchar" Nullable="false" MaxLength="25" />
+        </EntityType>
+        <Association Name="FK_alliance_users">
+          <End Role="users" Type="RS2Model.Store.users" Multiplicity="1" />
+          <End Role="alliance" Type="RS2Model.Store.alliance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="alliance">
+              <PropertyRef Name="user1_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_alliance_users1">
+          <End Role="users" Type="RS2Model.Store.users" Multiplicity="1" />
+          <End Role="alliance" Type="RS2Model.Store.alliance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="alliance">
+              <PropertyRef Name="user2_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_attack_cities">
+          <End Role="cities" Type="RS2Model.Store.cities" Multiplicity="1" />
+          <End Role="attack" Type="RS2Model.Store.attack" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cities">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="attack">
+              <PropertyRef Name="attacker_city_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_attack_cities1">
+          <End Role="cities" Type="RS2Model.Store.cities" Multiplicity="1" />
+          <End Role="attack" Type="RS2Model.Store.attack" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cities">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="attack">
+              <PropertyRef Name="defender_city_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_cities_city_types">
+          <End Role="city_types" Type="RS2Model.Store.city_types" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="cities" Type="RS2Model.Store.cities" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="city_types">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="cities">
+              <PropertyRef Name="city_type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_city_buildings_buildings">
+          <End Role="buildings" Type="RS2Model.Store.buildings" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="city_buildings" Type="RS2Model.Store.city_buildings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="buildings">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="city_buildings">
+              <PropertyRef Name="building_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_city_buildings_cities">
+          <End Role="cities" Type="RS2Model.Store.cities" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="city_buildings" Type="RS2Model.Store.city_buildings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cities">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="city_buildings">
+              <PropertyRef Name="city_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user_cities_cities">
+          <End Role="cities" Type="RS2Model.Store.cities" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="user_cities" Type="RS2Model.Store.user_cities" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cities">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="user_cities">
+              <PropertyRef Name="city_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user_cities_users">
+          <End Role="users" Type="RS2Model.Store.users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="user_cities" Type="RS2Model.Store.user_cities" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="user_cities">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="addUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="username" Type="varchar" Mode="In" />
+          <Parameter Name="password" Type="varchar" Mode="In" />
+          <Parameter Name="nickname" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="fn_diagramobjects" ReturnType="int" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="RS2Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="RS2Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="alliances" EntityType="RS2Model.alliance" />
+          <EntitySet Name="attacks" EntityType="RS2Model.attack" />
+          <EntitySet Name="buildings" EntityType="RS2Model.building" />
+          <EntitySet Name="cities" EntityType="RS2Model.city" />
+          <EntitySet Name="city_buildings" EntityType="RS2Model.city_buildings" />
+          <EntitySet Name="city_types" EntityType="RS2Model.city_types" />
+          <EntitySet Name="user_cities" EntityType="RS2Model.user_cities" />
+          <EntitySet Name="users" EntityType="RS2Model.user" />
+          <AssociationSet Name="FK_alliance_users" Association="RS2Model.FK_alliance_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="alliance" EntitySet="alliances" />
+          </AssociationSet>
+          <AssociationSet Name="FK_alliance_users1" Association="RS2Model.FK_alliance_users1">
+            <End Role="users" EntitySet="users" />
+            <End Role="alliance" EntitySet="alliances" />
+          </AssociationSet>
+          <AssociationSet Name="FK_attack_cities" Association="RS2Model.FK_attack_cities">
+            <End Role="cities" EntitySet="cities" />
+            <End Role="attack" EntitySet="attacks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_attack_cities1" Association="RS2Model.FK_attack_cities1">
+            <End Role="cities" EntitySet="cities" />
+            <End Role="attack" EntitySet="attacks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_city_buildings_buildings" Association="RS2Model.FK_city_buildings_buildings">
+            <End Role="buildings" EntitySet="buildings" />
+            <End Role="city_buildings" EntitySet="city_buildings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_cities_city_types" Association="RS2Model.FK_cities_city_types">
+            <End Role="city_types" EntitySet="city_types" />
+            <End Role="cities" EntitySet="cities" />
+          </AssociationSet>
+          <AssociationSet Name="FK_city_buildings_cities" Association="RS2Model.FK_city_buildings_cities">
+            <End Role="cities" EntitySet="cities" />
+            <End Role="city_buildings" EntitySet="city_buildings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_users_cities_cities" Association="RS2Model.FK_users_cities_cities">
+            <End Role="cities" EntitySet="cities" />
+            <End Role="user_cities" EntitySet="user_cities" />
+          </AssociationSet>
+          <AssociationSet Name="FK_users_cities_users" Association="RS2Model.FK_users_cities_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="user_cities" EntitySet="user_cities" />
+          </AssociationSet>
+          <EntitySet Name="sysdiagrams" EntityType="RS2Model.sysdiagram" />
+        </EntityContainer>
+        <EntityType Name="alliance">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="user1_id" Type="Int32" Nullable="false" />
+          <Property Name="user2_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="user" Relationship="RS2Model.FK_alliance_users" FromRole="alliance" ToRole="users" />
+          <NavigationProperty Name="user1" Relationship="RS2Model.FK_alliance_users1" FromRole="alliance" ToRole="users" />
+        </EntityType>
+        <EntityType Name="attack">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="attacker_city_id" Type="Int32" Nullable="false" />
+          <Property Name="defender_city_id" Type="Int32" Nullable="false" />
+          <Property Name="attack_time" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="city" Relationship="RS2Model.FK_attack_cities" FromRole="attack" ToRole="cities" />
+          <NavigationProperty Name="city1" Relationship="RS2Model.FK_attack_cities1" FromRole="attack" ToRole="cities" />
+        </EntityType>
+        <EntityType Name="building">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="base_food_production" Type="Double" Nullable="false" />
+          <Property Name="base_money_production" Type="Double" Nullable="false" />
+          <Property Name="base_materials_production" Type="Double" Nullable="false" />
+          <Property Name="base_army_producton" Type="Double" Nullable="false" />
+          <Property Name="base_food_cost" Type="Double" Nullable="false" />
+          <Property Name="base_money_cost" Type="Double" Nullable="false" />
+          <Property Name="base_materials_cost" Type="Double" Nullable="false" />
+          <NavigationProperty Name="city_buildings" Relationship="RS2Model.FK_city_buildings_buildings" FromRole="buildings" ToRole="city_buildings" />
+        </EntityType>
+        <EntityType Name="city">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="food" Type="Double" Nullable="false" />
+          <Property Name="money" Type="Double" Nullable="false" />
+          <Property Name="materials" Type="Double" Nullable="false" />
+          <Property Name="army" Type="Double" Nullable="false" />
+          <Property Name="city_type" Type="Int32" Nullable="false" />
+          <Property Name="position_row" Type="Int32" Nullable="false" />
+          <Property Name="position_column" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="attacks" Relationship="RS2Model.FK_attack_cities" FromRole="cities" ToRole="attack" />
+          <NavigationProperty Name="attacks1" Relationship="RS2Model.FK_attack_cities1" FromRole="cities" ToRole="attack" />
+          <NavigationProperty Name="city_types" Relationship="RS2Model.FK_cities_city_types" FromRole="cities" ToRole="city_types" />
+          <NavigationProperty Name="city_buildings" Relationship="RS2Model.FK_city_buildings_cities" FromRole="cities" ToRole="city_buildings" />
+          <NavigationProperty Name="user_cities" Relationship="RS2Model.FK_users_cities_cities" FromRole="cities" ToRole="user_cities" />
+          <Property Type="String" Name="name" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="city_buildings">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="city_id" Type="Int32" Nullable="false" />
+          <Property Name="building_id" Type="Int32" Nullable="false" />
+          <Property Name="lvl" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="building" Relationship="RS2Model.FK_city_buildings_buildings" FromRole="city_buildings" ToRole="buildings" />
+          <NavigationProperty Name="city" Relationship="RS2Model.FK_city_buildings_cities" FromRole="city_buildings" ToRole="cities" />
+          <Property Type="Int32" Name="building_positionX" Nullable="false" />
+          <Property Type="Int32" Name="building_positionY" Nullable="false" />
+          <Property Type="Int32" Name="isPending" />
+          <Property Type="DateTime" Name="buildStarted" Nullable="false" />
+          <Property Type="Int32" Name="buildTime" />
+        </EntityType>
+        <EntityType Name="city_types">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="food_multi" Type="Double" Nullable="false" />
+          <Property Name="money_multi" Type="Double" Nullable="false" />
+          <Property Name="materials_multi" Type="Double" Nullable="false" />
+          <Property Name="army_multi" Type="Double" Nullable="false" />
+          <NavigationProperty Name="cities" Relationship="RS2Model.FK_cities_city_types" FromRole="city_types" ToRole="cities" />
+        </EntityType>
+        <EntityType Name="user_cities">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="city_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="city" Relationship="RS2Model.FK_users_cities_cities" FromRole="user_cities" ToRole="cities" />
+          <NavigationProperty Name="user" Relationship="RS2Model.FK_users_cities_users" FromRole="user_cities" ToRole="users" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="username" Type="String" Nullable="false" MaxLength="25" Unicode="false" FixedLength="false" />
+          <Property Name="password" Type="String" Nullable="false" MaxLength="25" Unicode="false" FixedLength="false" />
+          <Property Name="nickname" Type="String" Nullable="false" MaxLength="25" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="alliances" Relationship="RS2Model.FK_alliance_users" FromRole="users" ToRole="alliance" />
+          <NavigationProperty Name="alliances1" Relationship="RS2Model.FK_alliance_users1" FromRole="users" ToRole="alliance" />
+          <NavigationProperty Name="user_cities" Relationship="RS2Model.FK_users_cities_users" FromRole="users" ToRole="user_cities" />
+        </EntityType>
+        <Association Name="FK_alliance_users">
+          <End Role="users" Type="RS2Model.user" Multiplicity="1" />
+          <End Role="alliance" Type="RS2Model.alliance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="alliance">
+              <PropertyRef Name="user1_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_alliance_users1">
+          <End Role="users" Type="RS2Model.user" Multiplicity="1" />
+          <End Role="alliance" Type="RS2Model.alliance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="alliance">
+              <PropertyRef Name="user2_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_attack_cities">
+          <End Role="cities" Type="RS2Model.city" Multiplicity="1" />
+          <End Role="attack" Type="RS2Model.attack" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cities">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="attack">
+              <PropertyRef Name="attacker_city_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_attack_cities1">
+          <End Role="cities" Type="RS2Model.city" Multiplicity="1" />
+          <End Role="attack" Type="RS2Model.attack" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cities">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="attack">
+              <PropertyRef Name="defender_city_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_city_buildings_buildings">
+          <End Role="buildings" Type="RS2Model.building" Multiplicity="1" />
+          <End Role="city_buildings" Type="RS2Model.city_buildings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="buildings">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="city_buildings">
+              <PropertyRef Name="building_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_cities_city_types">
+          <End Role="city_types" Type="RS2Model.city_types" Multiplicity="1" />
+          <End Role="cities" Type="RS2Model.city" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="city_types">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="cities">
+              <PropertyRef Name="city_type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_city_buildings_cities">
+          <End Role="cities" Type="RS2Model.city" Multiplicity="1" />
+          <End Role="city_buildings" Type="RS2Model.city_buildings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cities">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="city_buildings">
+              <PropertyRef Name="city_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_users_cities_cities">
+          <End Role="cities" Type="RS2Model.city" Multiplicity="1" />
+          <End Role="user_cities" Type="RS2Model.user_cities" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cities">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="user_cities">
+              <PropertyRef Name="city_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_users_cities_users">
+          <End Role="users" Type="RS2Model.user" Multiplicity="1" />
+          <End Role="user_cities" Type="RS2Model.user_cities" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="user_cities">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Type="String" Name="name" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="principal_id" Nullable="false" />
+          <Property Type="Int32" Name="diagram_id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="version" />
+          <Property Type="Binary" Name="definition" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="RS2ModelStoreContainer" CdmEntityContainer="RS2Entities">
+          <EntitySetMapping Name="alliances">
+            <EntityTypeMapping TypeName="RS2Model.alliance">
+              <MappingFragment StoreEntitySet="alliance">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="user1_id" ColumnName="user1_id" />
+                <ScalarProperty Name="user2_id" ColumnName="user2_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="attacks">
+            <EntityTypeMapping TypeName="RS2Model.attack">
+              <MappingFragment StoreEntitySet="attack">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="attacker_city_id" ColumnName="attacker_city_id" />
+                <ScalarProperty Name="defender_city_id" ColumnName="defender_city_id" />
+                <ScalarProperty Name="attack_time" ColumnName="attack_time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="buildings">
+            <EntityTypeMapping TypeName="RS2Model.building">
+              <MappingFragment StoreEntitySet="buildings">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="base_food_production" ColumnName="base_food_production" />
+                <ScalarProperty Name="base_money_production" ColumnName="base_money_production" />
+                <ScalarProperty Name="base_materials_production" ColumnName="base_materials_production" />
+                <ScalarProperty Name="base_army_producton" ColumnName="base_army_producton" />
+                <ScalarProperty Name="base_food_cost" ColumnName="base_food_cost" />
+                <ScalarProperty Name="base_money_cost" ColumnName="base_money_cost" />
+                <ScalarProperty Name="base_materials_cost" ColumnName="base_materials_cost" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cities">
+            <EntityTypeMapping TypeName="RS2Model.city">
+              <MappingFragment StoreEntitySet="cities">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="food" ColumnName="food" />
+                <ScalarProperty Name="money" ColumnName="money" />
+                <ScalarProperty Name="materials" ColumnName="materials" />
+                <ScalarProperty Name="army" ColumnName="army" />
+                <ScalarProperty Name="city_type" ColumnName="city_type" />
+                <ScalarProperty Name="position_row" ColumnName="position_row" />
+                <ScalarProperty Name="position_column" ColumnName="position_column" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="city_buildings">
+            <EntityTypeMapping TypeName="RS2Model.city_buildings">
+              <MappingFragment StoreEntitySet="city_buildings">
+                <ScalarProperty Name="buildTime" ColumnName="buildTime" />
+                <ScalarProperty Name="buildStarted" ColumnName="buildStarted" />
+                <ScalarProperty Name="isPending" ColumnName="isPending" />
+                <ScalarProperty Name="building_positionY" ColumnName="building_positionY" />
+                <ScalarProperty Name="building_positionX" ColumnName="building_positionX" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="city_id" ColumnName="city_id" />
+                <ScalarProperty Name="building_id" ColumnName="building_id" />
+                <ScalarProperty Name="lvl" ColumnName="lvl" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="city_types">
+            <EntityTypeMapping TypeName="RS2Model.city_types">
+              <MappingFragment StoreEntitySet="city_types">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="food_multi" ColumnName="food_multi" />
+                <ScalarProperty Name="money_multi" ColumnName="money_multi" />
+                <ScalarProperty Name="materials_multi" ColumnName="materials_multi" />
+                <ScalarProperty Name="army_multi" ColumnName="army_multi" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user_cities">
+            <EntityTypeMapping TypeName="RS2Model.user_cities">
+              <MappingFragment StoreEntitySet="user_cities">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="city_id" ColumnName="city_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="users">
+            <EntityTypeMapping TypeName="RS2Model.user">
+              <MappingFragment StoreEntitySet="users">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="nickname" ColumnName="nickname" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="RS2Model.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="RS2Model">
+        <EntityTypeShape EntityType="RS2Model.alliance" Width="1.5" PointX="5.25" PointY="11.25" Height="1.9802864583333317" IsExpanded="true" />
+        <EntityTypeShape EntityType="RS2Model.attack" Width="1.5" PointX="5.5" PointY="5.375" Height="2.1725878906249996" IsExpanded="true" />
+        <EntityTypeShape EntityType="RS2Model.building" Width="1.5" PointX="3" PointY="0.75" Height="2.9417936197916656" IsExpanded="true" />
+        <EntityTypeShape EntityType="RS2Model.city" Width="1.5" PointX="3" PointY="4.5" Height="3.5186979166666656" IsExpanded="true" />
+        <EntityTypeShape EntityType="RS2Model.city_buildings" Width="1.5" PointX="5.25" PointY="2" Height="2.5571907552083335" IsExpanded="true" />
+        <EntityTypeShape EntityType="RS2Model.city_types" Width="1.5" PointX="0.75" PointY="5.125" Height="2.1725878906249996" IsExpanded="true" />
+        <EntityTypeShape EntityType="RS2Model.user_cities" Width="1.5" PointX="5.25" PointY="8.25" Height="1.9802864583333317" IsExpanded="true" />
+        <EntityTypeShape EntityType="RS2Model.user" Width="1.5" PointX="3" PointY="9" Height="2.3648893229166674" IsExpanded="true" />
+        <AssociationConnector Association="RS2Model.FK_alliance_users" ManuallyRouted="false">
+          <ConnectorPoint PointX="3.75" PointY="11.364889322916667" />
+          <ConnectorPoint PointX="3.75" PointY="12.297588390624998" />
+          <ConnectorPoint PointX="4.0729191666666669" PointY="12.297588390624998" />
+          <ConnectorPoint PointX="4.2395858333333329" PointY="12.297588390624998" />
+          <ConnectorPoint PointX="5.25" PointY="12.297588390624998" />
+        </AssociationConnector>
+        <AssociationConnector Association="RS2Model.FK_alliance_users1" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.1562525" PointY="11.364889322916667" />
+          <ConnectorPoint PointX="4.1562525" PointY="12.795189924479164" />
+          <ConnectorPoint PointX="5.25" PointY="12.795189924479164" />
+        </AssociationConnector>
+        <AssociationConnector Association="RS2Model.FK_attack_cities" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="6.4612939453125" />
+          <ConnectorPoint PointX="5.5" PointY="6.4612939453125" />
+        </AssociationConnector>
+        <AssociationConnector Association="RS2Model.FK_attack_cities1" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="5.85564697265625" />
+          <ConnectorPoint PointX="5.5" PointY="5.85564697265625" />
+        </AssociationConnector>
+        <AssociationConnector Association="RS2Model.FK_city_buildings_buildings" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="2.8458968098958328" />
+          <ConnectorPoint PointX="5.25" PointY="2.8458968098958328" />
+        </AssociationConnector>
+        <AssociationConnector Association="RS2Model.FK_cities_city_types" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="6.2112939453125" />
+          <ConnectorPoint PointX="3" PointY="6.2112939453125" />
+        </AssociationConnector>
+        <AssociationConnector Association="RS2Model.FK_city_buildings_cities" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="4.8170475260416659" />
+          <ConnectorPoint PointX="5.25" PointY="4.8170475260416659" />
+        </AssociationConnector>
+        <AssociationConnector Association="RS2Model.FK_users_cities_cities" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="8.2109993489583335" />
+          <ConnectorPoint PointX="4.875" PointY="8.5859993489583335" />
+          <ConnectorPoint PointX="4.875" PointY="7.8738471538461541" />
+          <ConnectorPoint PointX="5.2511528461538459" PointY="8.25" />
+        </AssociationConnector>
+        <AssociationConnector Association="RS2Model.FK_users_cities_users" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="9.6151432291666659" />
+          <ConnectorPoint PointX="5.25" PointY="9.6151432291666659" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="RS2Model.sysdiagram" Width="1.5" PointX="7.375" PointY="0.75" Height="1.9802864583333317" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

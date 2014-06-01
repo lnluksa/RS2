@@ -1,0 +1,31 @@
+﻿@model RS2.Models.UserDetailsModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+    
+ 
+@section MainSection
+{
+
+}
+@section UserMenu
+{
+    @if (Request.Cookies.AllKeys.Contains("username"))
+    {
+        RS2.Models.user U = ((RS2.Models.UserDetailsModel)Model).User;
+ 
+        <p>User: @Html.DisplayFor(model => model.User.nickname) (@Html.DisplayFor(model=>model.User.username))</p>
+        <hr />
+        
+        foreach(RS2.Models.city C in ((RS2.Models.UserDetailsModel)Model).Cities)
+        {
+            <button type="button" class="btn btn-lg btn-default" style="width:100%">
+                @Html.ActionLink(C.name, "ShowCity", "Home", new { id = C.id }, null)
+            </button>
+        }
+    }
+}

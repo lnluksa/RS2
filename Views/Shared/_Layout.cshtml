@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <link rel="Stylesheet" href="@Url.Content("~/Content/bootstrap/bootstrap.min.css")" />
+    <link rel="Stylesheet" href="@Url.Content("~/Content/Site.css")" />
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    @RenderSection("ScriptsSection",required:false);
+    <section class="content-wrapper main-content clear-fix">    
+    </section>
+    <title>RS2project</title>
+</head>
+<body>
+    <div class="logo">
+        <!-- Ako je korisnik ulogovan, upisemo ovde podatke iz cookie-a -->
+        @if (Request.Cookies.AllKeys.Contains("username"))
+        {
+            <p>Logged in as : <strong>@Request.Cookies["username"].Value @Html.ActionLink("Sign out", "LogOut", "Account")</strong></p>    
+        }
+        else
+        {
+            <p><strong>No one is logged in. @Html.ActionLink("Log in","LogIn","Account") or @Html.ActionLink("Register","Register","Account")</strong></p>
+        }
+    </div>
+    
+    <br /><br />
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2" style="border-right:1px solid #BBBBBB">
+                @RenderSection("UserMenu", required: false)
+                <section class="content-wrapper main-content clear-fix">    
+                </section>
+                <br /><br /><br /><br />
+            </div>
+            <div class="col-md-10">
+                @RenderSection("MainSection", required: false)
+                <section class="content-wrapper main-content clear-fix">
+                    @RenderBody()
+                </section>   
+            </div>
+        </div>
+    </div>
+</body>
+</html>

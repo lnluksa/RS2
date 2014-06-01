@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <link rel="Stylesheet" href="@Url.Content("~/Content/bootstrap/bootstrap.min.css")" />
+    <link rel="Stylesheet" href="@Url.Content("~/Content/Site.css")" />
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>RS2project</title>
+</head>
+<body>
+    <div class="logo">
+    <!-- Ako je korisnik ulogovan, upisemo ovde podatke iz cookie-a -->
+        @if (Request.Cookies.AllKeys.Contains("username"))
+        {
+            <p>Logged in as : <strong>@Request.Cookies["username"].Value @Html.ActionLink("Sign out", "LogOut", "Account")</strong></p>    
+        }
+        else
+        {
+            <p><strong>No one is logged in. @Html.ActionLink("Log in","LogIn","Account") or @Html.ActionLink("Register","Register","Account")</strong></p>
+        }
+    </div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                @RenderSection("LogInSection", required: false)
+                <section class="content-wrapper main-content clear-fix">
+                @RenderBody()
+                </section>
+            </div>
+        </div>
+    </section>
+    </div>
+</body>
+</html>

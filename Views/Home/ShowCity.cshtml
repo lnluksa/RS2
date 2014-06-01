@@ -1,0 +1,214 @@
+﻿@model RS2.Models.ShowCityModel
+
+@{
+    ViewBag.Title = "ShowCity";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section ScriptsSection
+{
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript">
+      
+        /*
+        *   GLavna jQuery funkcija
+        */
+        $(document).ready(function(){
+
+            /* ovim C# kodom povlacimo sledece detalje o zgradama o tekucem gradu:
+             * 1) listu datuma pocetka izgradnje tih zgrada ( u sekundama)
+             * 2) listu vremena izgradnje tih zgrada u sekundama
+             * Posle cemo te podatke da ubacimo u Javascript promenljive */
+           
+              /*dovlacenje sa servera: */ 
+              @{
+              List<long> listOfBuildStarted = new List<long>();
+              List<int> listOfBuildTime = new List<int>();
+
+              foreach(var X in Model.CityDetailsModel.BuildingDetailsList)
+              {
+                  if (X.CityBuildingsModel != null)
+                  {
+                      listOfBuildStarted.Add(RS2.Constants.convertDateTimeIntoSecs(X.CityBuildingsModel.buildStarted));
+                      listOfBuildTime.Add((int)X.CityBuildingsModel.buildTime);
+                  }
+                  else
+                  {
+                      listOfBuildStarted.Add(-1);
+                      listOfBuildTime.Add(-1);
+                  }
+              }
+              for (int i=0;i<listOfBuildStarted.Count;i++)
+              {
+                    System.Diagnostics.Debug.Write(listOfBuildStarted[i] + " ");
+              }
+            }
+
+           // racuna i podesava duzinu progress barova za zgrade koje se grade 
+            var doStuff = function(){
+       
+            // smestamo podatke koje smo dobili sa servera u javascript nizove
+                             
+            var buildStartedList = @Html.Raw(Json.Encode(listOfBuildStarted));
+            var buildTimeList = @Html.Raw(Json.Encode(listOfBuildTime));
+            var cityID = @Model.CityDetailsModel.City.id;
+             
+            // iteriramo kroz svih 9 polja
+
+            for (i = 0; i < 3; i++) {
+                for (j = 0; j < 3; j++) {
+
+                        // ako je na tom polju zgrada u procesu izgradnje
+                        if (buildStartedList[i*3+j]!=-1)
+                        {
+                            var buildTime = buildTimeList[i*3+j];               // uzmemo njeno vreme izgradnje (podatak je u sekundama)
+                            var buildStartedTime = buildStartedList[i*3+j];     // uzmemo vreme starta izgradnje (podataka je u sekundama)
+                            var now = new Date();
+                            var currentTime = new Date(now.getTime())/1000;     // izracunamo trenutno vreme (u sekundama)
+                            var percents;                                       // ovo ce da oznacava koliko treba da bude dugacak progress bar za tu zgradu
+                           
+                         
+                            if (currentTime - buildStartedTime > buildTime)
+                            {
+                                percents = 100;
+                               
+                                // posalji ajax zahtev da se zapravo updgraduje zgrada (promena podataka u bazi    
+                            
+                            }
+                            else
+                            {
+                                /*
+                                 *  racunamo duzinu progress bara na osnovu proporcije:
+                                 *  (currentTime - buildStartedTime) : buildTime = percents : 100
+                                 */
+                                percents =  (currentTime-buildStartedTime)*100 / buildTime;
+                            }
+
+                            // div u redu i i kolonji j podesimo da bude odgovarajuce duzine i da ima odgovarajuci natpis
+                            
+                            $("div#r"+i+"c"+j).width(percents+"%");
+                            $("div#r"+i+"c"+j).html("<strong>"+parseFloat(percents).toFixed(2)+"%</strong>");
+            
+                         }
+                       }
+                     }
+            }
+
+            // funkcija koja ponavlja funkciju doStuff na svake dve sekunde
+            function repeatDoStuff(){
+                doStuff();
+                setTimeout(repeatDoStuff,2000);
+            }
+            
+            /* kad smo povukli sve potrebne stvari sa servera i definisali funkcije
+            pozivamo funkciju repeatDoStuff()*/
+
+            repeatDoStuff();
+              
+        });
+    
+    </script>    
+}
+
+@section UserMenu
+{
+    @if (Request.Cookies.AllKeys.Contains("username"))
+    {
+        RS2.Models.user U = Model.UserDetailsModel.User;
+ 
+        <p>User: @Html.DisplayFor(model => model.UserDetailsModel.User.nickname) (@Html.DisplayFor(model=>model.UserDetailsModel.User.username))</p>
+        <hr />
+        
+        foreach(RS2.Models.city C in Model.UserDetailsModel.Cities)
+        {
+            <button type="button" class="btn btn-lg btn-default" style="width:100%">
+               @Html.ActionLink(C.name, "ShowCity","Home",new {id = C.id},null)          
+            </button>
+        }
+    }
+}
+
+@section MainSection
+{
+<h2>Showing city:
+@switch(Model.CityDetailsModel.City.city_type)
+{
+    case 1:<button type="button" class="btn btn-lg btn-warning">@Model.CityDetailsModel.City.name</button>
+        break;
+    case 2:
+         <button type="button" class="btn btn-lg btn-success">@Model.CityDetailsModel.City.name</button>
+        break;
+    case 3:
+         <button type="button" class="btn btn-lg btn-default">@Model.CityDetailsModel.City.name</button>
+        break;
+    case 4:
+         <button type="button" class="btn btn-lg btn-danger">@Model.CityDetailsModel.City.name</button>
+        break;
+}
+</h2>
+<hr />
+<p>
+    <strong>Food:</strong> @Html.DisplayFor(model => model.CityDetailsModel.City.food) / + @Html.DisplayFor(model => model.CityDetailsModel.CityType.food_multi) | 
+    <strong>Money:</strong> @Html.DisplayFor(model => model.CityDetailsModel.City.money) / + @Html.DisplayFor(model => model.CityDetailsModel.CityType.money_multi) | 
+    <strong>Materials:</strong> @Html.DisplayFor(model => model.CityDetailsModel.City.materials) / + @Html.DisplayFor(model => model.CityDetailsModel.CityType.materials_multi) | 
+    <strong>Army:</strong> @Html.DisplayFor(model => model.CityDetailsModel.City.army)
+</p>
+<hr />
+
+
+<table class="table table-bordered">
+@for (var i=0; i<3; i++)
+{
+    <tr>
+     @for(var j=0;j<3;j++) 
+     {
+            
+         RS2.Models.BuildingDetailsModel b = Model.CityDetailsModel.BuildingDetailsList[i * 3 + j];
+         
+           
+         if (b.BuildingModel!=null && b.CityBuildingsModel!=null)
+         { 
+            if (b.CityBuildingsModel.isPending == 1)
+            {
+                <td style="background-color:#DDDDEE">
+                <p><strong> @Html.Encode(b.BuildingModel.name) </strong> (updating to level : @Html.Encode(b.CityBuildingsModel.lvl))</p>
+                <div class="progress-bar" id="@Html.Encode("r"+i+"c"+j)" style="width: 2%; height: 20px: text-align:left; color:Black;"></div><br />
+                @Html.ActionLink("delete", "Delete", "Building", new { 
+                                                                        id = Model.CityDetailsModel.City.id,
+                                                                        row = b.CityBuildingsModel.building_positionX,
+                                                                        column = b.CityBuildingsModel.building_positionY
+                                                                      }, null)
+                </td>
+               
+            }  
+            else
+            {
+                <td style="background-color:#EEEEEE">
+                <p><strong> @Html.Encode(b.BuildingModel.name) </strong> (level : @Html.Encode(b.CityBuildingsModel.lvl))</p>
+                <p><a href="#">upgrade</a> | @Html.ActionLink("delete", "Delete", "Building", new
+                                                                                                {
+                                                                                                    id = Model.CityDetailsModel.City.id,
+                                                                                                    row = b.CityBuildingsModel.building_positionX,
+                                                                                                    column = b.CityBuildingsModel.building_positionY
+                                                                                                }, null)</p>
+                </td>
+            }
+         }
+         else
+         {
+             <td style="background-color:#FFF">
+                @Html.ActionLink("AddBuilding", "AddBuilding", "Building", new
+                {
+                    id = Model.CityDetailsModel.City.id,
+                    row = i,
+                    column = j
+                }, null)
+            </td>
+            
+         }
+        
+         }
+     </tr>  
+     }
+</table>
+}           
