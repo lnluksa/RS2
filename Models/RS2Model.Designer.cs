@@ -2201,7 +2201,7 @@ namespace RS2.Models
             {
                 OnnicknameChanging(value);
                 ReportPropertyChanging("nickname");
-                _nickname = StructuralObject.SetValidValue(value, false);
+                    _nickname = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("nickname");
                 OnnicknameChanged();
             }

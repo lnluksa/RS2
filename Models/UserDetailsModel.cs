@@ -28,7 +28,7 @@ namespace RS2.Models
             this.Cities = (from USER in entities.users
                             join USERCITY in entities.user_cities on USER.id equals USERCITY.user_id
                             join CITY in entities.cities on USERCITY.city_id equals CITY.id
-                            where USER.username == User.username
+                            where USER.id == User.id
                             select CITY
                            ).ToList();
         }

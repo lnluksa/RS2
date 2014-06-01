@@ -13,20 +13,23 @@
 <body>
     <div class="logo">
         <!-- Ako je korisnik ulogovan, upisemo ovde podatke iz cookie-a -->
-        @if (Request.Cookies.AllKeys.Contains("username"))
+        @if (Request.Cookies.AllKeys.Contains("currentUser"))
         {
-            <p>Logged in as : <strong>@Request.Cookies["username"].Value @Html.ActionLink("Sign out", "LogOut", "Account")</strong></p>    
+            <p>Logged in as : <strong>@Request.Cookies["currentUser"]["nickname"] @Html.ActionLink("Sign out", "LogOut", "Account")</strong></p>    
         }
         else
         {
             <p><strong>No one is logged in. @Html.ActionLink("Log in","LogIn","Account") or @Html.ActionLink("Register","Register","Account")</strong></p>
         }
     </div>
-    
+        
     <br /><br />
     <div class="container">
         <div class="row">
             <div class="col-md-2" style="border-right:1px solid #BBBBBB">
+                <button type="button" class="btn btn-lg btn-default" style="width:100%">
+                    @Html.ActionLink("Show Map","Index", "Map")
+                </button>
                 @RenderSection("UserMenu", required: false)
                 <section class="content-wrapper main-content clear-fix">    
                 </section>

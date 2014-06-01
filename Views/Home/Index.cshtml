@@ -14,7 +14,7 @@
 }
 @section UserMenu
 {
-    @if (Request.Cookies.AllKeys.Contains("username"))
+    @if (Request.Cookies.AllKeys.Contains("currentUser"))
     {
         RS2.Models.user U = ((RS2.Models.UserDetailsModel)Model).User;
  

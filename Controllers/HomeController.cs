@@ -17,12 +17,12 @@ namespace RS2.Controllers
         {
             int currentUserID;
            
-            if (!Request.Cookies.AllKeys.Contains("userID"))
+            if (!Request.Cookies.AllKeys.Contains("currentUser"))
             {
                 return RedirectToAction("LogIn","Account");
             }
-               
-            currentUserID = Int32.Parse(Request.Cookies["userID"].Value);
+            //var id = Request.Cookies["userID"].Value;
+            currentUserID = Int32.Parse(Request.Cookies["currentUser"]["id"]);
 
             user currentUser = (from USER in entites.users
                                 where USER.id == currentUserID
@@ -37,10 +37,21 @@ namespace RS2.Controllers
         {
             // ako nismo ulogovani, prebacuje nas na login
 
-            if (!Request.Cookies.AllKeys.Contains("username"))
+            if (!Request.Cookies.AllKeys.Contains("currentUser"))
             {
                 return RedirectToAction("LogIn", "Account");
             }
+
+            //validacija user-a
+            int currentUserID = Int32.Parse(Request.Cookies["currentUser"]["id"]);
+            var userOwnsCity = (from C in entites.user_cities
+                               where C.city_id == id && C.user_id == currentUserID
+                               select C).Count();
+            if (userOwnsCity == 0) { 
+            //ERROR PAGE
+                return RedirectToAction("Error", "Account");
+            }
+            
 
             // napunimo model za grad
             CityDetailsModel cityDetails = new CityDetailsModel();
@@ -51,7 +62,6 @@ namespace RS2.Controllers
             cityDetails.fillCityDetailsModel(currentCity, entites);
 
             // napunimo model za korisnika
-            int currentUserID = Int32.Parse(Request.Cookies["userID"].Value);
             user currentUser = (from e in entites.users
                                 where e.id == currentUserID
                                 select e).First();

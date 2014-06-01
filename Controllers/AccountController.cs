@@ -23,52 +23,49 @@ namespace RS2.Controllers
         [HttpPost]
         public ActionResult LogIn([Bind(Exclude = "id,nickname")] user LoginData)
         {
-            //int count;
-
             /* sa Bind-om smo rekli da je LoginData validan model ako se
              * ne racunaju id i nickname */
 
             if (!ModelState.IsValid)
             {
+               // this.Flash("Invalid data!", FlashLevel.Warning);
                 return View();
             }
             
             // Proverimo da li je korisnik u bazi
 
-            //count = (from USER in entites.users
-            //         where USER.username == LoginData.username && USER.password == LoginData.password
-            //         select USER).Count();
-            var userID = from USER in entites.users
-                         where USER.username == LoginData.username && USER.password == LoginData.password
-                         select USER.id;
-            
-
-            //Debug.WriteLine("count = " + count);
-
-            // ako nema tog korisnika u bazi, vracamo prikaz login forme
-
-            if (userID == null)
+            try
             {
-                return View();
-            }
-            else
-            {
+                var user = (from USER in entites.users
+                              where USER.username == LoginData.username && USER.password == LoginData.password
+                              select USER).First();
+
+
+                //Debug.WriteLine("count = " + count);
 
                 // ako smo nasli tog korisnika u bazi, pravimo cookie sa njegovim id-em
 
-                var userIDCookie = new HttpCookie("userID", userID.ToString());
-                Response.AppendCookie(userIDCookie);
+                var currentUser = new HttpCookie("currentUser");
+                currentUser.Values["id"] = user.id.ToString();
+                currentUser.Values["username"] = user.username.ToString();
+                currentUser.Values["nickname"] = user.nickname.ToString();
+                Response.AppendCookie(currentUser);
 
                 return RedirectToAction("Index", "Home");
+            }
+            catch {
+                // ako nema tog korisnika u bazi, vracamo prikaz login forme
+                //this.Flash("No registrated user with those credentials!", FlashLevel.Error);
+                return View();
             }
         }
         public ActionResult LogOut()
         {
             /* Ako postoji cookie, brisemo ga */
 
-            if (Request.Cookies["userID"] != null)
+            if (Request.Cookies["currentUser"]["id"] != null)
             {
-                var c = new HttpCookie("userID");
+                var c = new HttpCookie("currentUser");
                 c.Expires = DateTime.Now.AddDays(-1);
                 Response.Cookies.Add(c);
             }
@@ -116,7 +113,10 @@ namespace RS2.Controllers
 
                 // nakon toga odmah i ulogujemo korisnika
 
-                var cookie = new HttpCookie("userID", maxID.ToString());
+                var cookie = new HttpCookie("currentUser");
+                cookie.Values["id"] = RegisterData.id.ToString();
+                cookie.Values["username"] = RegisterData.username.ToString();
+                cookie.Values["nickname"] = RegisterData.nickname.ToString();
                 Response.AppendCookie(cookie);
                 return RedirectToAction("Index", "Home");
             }

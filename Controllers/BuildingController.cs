@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Diagnostics;
 
 using RS2.Models;
+using System.Web.Security;
 
 namespace RS2.Controllers
 {
@@ -20,12 +21,21 @@ namespace RS2.Controllers
         [HttpGet]
         [ActionName("AddBuilding")]
         public ActionResult AddBuilding(int id, int row, int column)
-        {
-            // napunimo model za korisnika
+        {   
+            //validate
+            int currentUserID = Int32.Parse(Request.Cookies["currentUser"]["id"]);
+            var userOwnsCity = (from C in entities.user_cities
+                                where C.city_id == id && C.user_id == currentUserID
+                                select C).Count();
+            if (userOwnsCity == 0)
+            {
+                //ERROR PAGE
+                return RedirectToAction("Error", "Account");
+            }
 
-            string currentUsername = Request.Cookies["username"].Value;
+            // napunimo model za korisnika
             user currentUser = (from e in entities.users
-                                where e.username == currentUsername
+                                where e.id == currentUserID
                                 select e).First();
 
             UserDetailsModel userDetails = new UserDetailsModel();
@@ -83,7 +93,17 @@ namespace RS2.Controllers
         }
         public ActionResult Delete(int id, int row, int column)
         {
-      
+            //validate
+            int currentUserID = Int32.Parse(Request.Cookies["currentUser"]["id"]);
+            var userOwnsCity = (from C in entities.user_cities
+                                where C.city_id == id && C.user_id == currentUserID
+                                select C).Count();
+            if (userOwnsCity == 0)
+            {
+                //ERROR PAGE
+                return RedirectToAction("Error", "Account");
+            }
+            
             var result = (from CITY_BUILDINGS in entities.city_buildings
                                         where (CITY_BUILDINGS.city_id == id 
                                         && CITY_BUILDINGS.building_positionX == row
